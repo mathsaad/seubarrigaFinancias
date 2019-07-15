@@ -1,0 +1,16 @@
+{
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "barriga",
+            "dialect": "PostgreSQL",
+            "name": "seuBarrigaFinancias",
+            "password": ";rootdgt",
+            "port": 5432,
+            "server": "127.0.0.1",
+            "username": "postgres"
+        }
+    ]
+}
