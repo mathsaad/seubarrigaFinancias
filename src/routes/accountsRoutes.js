@@ -1,6 +1,6 @@
 const express = require('express');
 
-const recursoIndevidoError = require('../errors/RecursoIndevidoError')
+const RecursoIndevidoError = require('../errors/RecursoIndevidoError');
 
 module.exports = (app) => {
   const router = express.Router();
@@ -8,7 +8,7 @@ module.exports = (app) => {
   router.param('id', (req, res, next) => {
     app.services.account.find({ id: req.params.id })
       .then((acc) => {
-        if (acc.user_id !== req.user.id) throw new recursoIndevidoError('Este recurso não pertence ao usuário.');
+        if (acc.user_id !== req.user.id) throw new RecursoIndevidoError('Este recurso não pertence ao usuário.');
         else next();
       }).catch(err => next(err));
   });
@@ -29,7 +29,7 @@ module.exports = (app) => {
 
   router.get('/:id', (req, res, next) => {
     app.services.account.find({ id: req.params.id })
-      .then((result) => res.status(200).json(result))
+      .then(result => res.status(200).json(result))
       .catch(err => next(err));
   });
 

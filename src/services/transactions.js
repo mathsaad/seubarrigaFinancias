@@ -1,4 +1,5 @@
-const ValidationError = require('../errors/validationError')
+const ValidationError = require('../errors/validationError');
+
 module.exports = (app) => {
   const find = (userId, filter = {}) => {
     return app.db('transactions')
@@ -12,18 +13,18 @@ module.exports = (app) => {
     return app.db('transactions')
       .where(filter)
       .first();
-  }
+  };
 
   const save = (transaction) => {
-    if (!transaction.description) throw new ValidationError('Descrição é um atributo obrigatório')
-    if (!transaction.ammount) throw new ValidationError('Valor é um atributo obrigatório')
-    if (!transaction.date) throw new ValidationError('Data é um atributo obrigatório')
-    if (!transaction.acc_id) throw new ValidationError('Conta é um atributo obrigatório')
-    if (!transaction.type) throw new ValidationError('Tipo é um atributo obrigatório')
-    if (!(transaction.type === 'I' || transaction.type === 'O')) throw new ValidationError('Tipo inserido inválido')
+    if (!transaction.description) throw new ValidationError('Descrição é um atributo obrigatório');
+    if (!transaction.ammount) throw new ValidationError('Valor é um atributo obrigatório');
+    if (!transaction.date) throw new ValidationError('Data é um atributo obrigatório');
+    if (!transaction.acc_id) throw new ValidationError('Conta é um atributo obrigatório');
+    if (!transaction.type) throw new ValidationError('Tipo é um atributo obrigatório');
+    if (!(transaction.type === 'I' || transaction.type === 'O')) throw new ValidationError('Tipo inserido inválido');
 
 
-    const newTransaction = { ...transaction }
+    const newTransaction = { ...transaction };
     if ((transaction.type === 'I' && transaction.ammount < 0) || (transaction.type === 'O' && transaction.ammount > 0)) {
       newTransaction.ammount *= -1;
     }
@@ -34,14 +35,16 @@ module.exports = (app) => {
   const update = (id, transaction) => {
     return app.db('transactions')
       .where({ id })
-      .update(transaction, '*')
-  }
+      .update(transaction, '*');
+  };
 
   const remove = (id) => {
     return app.db('transactions')
       .where({ id })
       .del();
-  }
+  };
 
-  return { find, save, findOne, update, remove };
-}
+  return {
+    find, save, findOne, update, remove,
+  };
+};

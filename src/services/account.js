@@ -22,8 +22,8 @@ module.exports = (app) => {
   };
 
   const remove = async (id) => {
-    const transactions = await app.services.transactions.findOne({ acc_id: id })
-    if (transactions) throw new ValidationError('Essa conta possui transações associadas')
+    const transactions = await app.services.transactions.findOne({ acc_id: id });
+    if (transactions) throw new ValidationError('Essa conta possui transações associadas');
     return app.db('accounts').where({ id }).del();
   };
 

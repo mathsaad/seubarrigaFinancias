@@ -48,10 +48,11 @@ test('Não deve inserir uma conta com nome duplicado, para um mesmo usuário', (
 
 test('Deve listar apenas as contas do usuário', async () => {
   await app.db('transactions').del();
+  await app.db('transfers').del();
   await app.db('accounts').del();
   return app.db('accounts').insert([
     { name: 'Acc User #1', user_id: user.id },
-    { name: 'Acc User #2', user_id: user2.id }
+    { name: 'Acc User #2', user_id: user2.id },
   ]).then(() => request(app).get(MAIN_ROUTE)
     .set('authorization', `bearer ${user.token}`)
     .then((res) => {
@@ -76,12 +77,12 @@ test('Deve retornar uma conta por ID', () => {
 test('Não deve retornar contas de outro usuário', () => {
   return app.db('accounts')
     .insert({ name: 'Acc User #2', user_id: user2.id }, ['id'])
-    .then((acc) => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`)
+    .then(acc => request(app).get(`${MAIN_ROUTE}/${acc[0].id}`)
       .set('authorization', `bearer ${user.token}`))
     .then((res) => {
       expect(res.status).toBe(403);
-      expect(res.body.error).toBe('Este recurso não pertence ao usuário.')
-    })
+      expect(res.body.error).toBe('Este recurso não pertence ao usuário.');
+    });
 });
 
 
@@ -100,11 +101,11 @@ test('Deve alterar uma conta', () => {
 test('Não deve alterar contas de outro usuário', () => {
   return app.db('accounts')
     .insert({ name: 'Acc User #2', user_id: user2.id }, ['id'])
-    .then((acc) => request(app).put(`${MAIN_ROUTE}/${acc[0].id}`)
+    .then(acc => request(app).put(`${MAIN_ROUTE}/${acc[0].id}`)
       .set('authorization', `bearer ${user.token}`))
     .then((res) => {
       expect(res.status).toBe(403);
-      expect(res.body.error).toBe('Este recurso não pertence ao usuário.')
+      expect(res.body.error).toBe('Este recurso não pertence ao usuário.');
     });
 });
 
@@ -121,10 +122,10 @@ test('Deve remover uma conta', () => {
 test('Não deve remover contas de outro usuário', () => {
   return app.db('accounts')
     .insert({ name: 'Acc User #2', user_id: user2.id }, ['id'])
-    .then((acc) => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`)
+    .then(acc => request(app).delete(`${MAIN_ROUTE}/${acc[0].id}`)
       .set('authorization', `bearer ${user.token}`))
     .then((res) => {
       expect(res.status).toBe(403);
-      expect(res.body.error).toBe('Este recurso não pertence ao usuário.')
+      expect(res.body.error).toBe('Este recurso não pertence ao usuário.');
     });
 });
